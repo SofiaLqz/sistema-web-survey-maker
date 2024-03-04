@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informacion</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mt-2 mb-2 d-flex flex-lg-row align-items-center">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('home')}}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="75" height="36">
+            </a>
+            <!-- Botón del menú -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Elementos del menú colapsable -->
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="menu">
+                <!-- Header -->
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbar2Label"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <!-- Body -->
+                <div class="offcanvas-body mx-4 mx-lg-0 d-flex flex-column flex-lg-row align-items-center">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active mx-lg-2 mb-3 mb-lg-0" href="{{url_for('crear_encuesta')}}">Crear encuesta</a>
+                        </li>
+                    </ul>
+                    <!-- Barra de búsqueda -->
+                    <div class="col-12 col-lg-auto mx-lg-2" role="search">
+                        <input class="form-control" type="search"  id="buscar" placeholder="Buscar..." aria-label="Search">
+                    </div>
+                    <!-- Botón 'Cerrar sesión'-->
+                    <div class="mt-auto mt-lg-0 ms-lg-2 col-12 col-lg-auto">
+                        <a class="btn btn-outline-light w-100" href="{{url_for('logout')}}" role="button">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="mb-3 mt-3">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16" role="link" aria-label="Volver">
+                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                </svg>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card text-bg-light mb-3">
+                    <div class="card-header text-center">Descripción de los diferentes tipos de pregunta que puedes utilizar para elaborar 
+                        el fomulario de tu encuesta
+                    </div>
+                    <div class="card-body">
+            
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3 h-100">
+                                    <div class="card-header text-center">
+                                        <strong>Pregunta abierta</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">El encuestado responde con sus propias palabras.</p>
+                                    </div>
+                                    <img src="{{ url_for('static', filename='img/pregunta-abierta.png') }}" class="card-img-bottom" alt="...">
+                                </div>
+                            </div>
+        
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3 h-100">
+                                    <div class="card-header text-center">
+                                        <strong>Pregunta cerrada de opción simple</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">El encuestado solo puede elegir una opción de entre las opciones que se le presentan.</p>
+                                    </div>  
+                                    <img src="{{ url_for('static', filename='img/pregunta-cerrada-simple.png') }}" class="card-img-bottom" alt="...">
+                                </div>
+                            </div>
+        
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3 h-100">
+                                    <div class="card-header text-center">
+                                        <strong>Pregunta cerrada de opción múltiple</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">El encuestado puede elegir, de entre las opciones que se le presentan, todas las que considere necesarias.</p>
+                                    </div>  
+                                    <img src="{{ url_for('static', filename='img/pregunta-cerrada-multiple.png') }}" class="card-img-bottom" alt="...">
+                                </div>
+                            </div>
+        
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3 h-100">
+                                    <div class="card-header text-center">
+                                        <strong>Pregunta semicerrada de opción simple</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">El encuestado pueda escribir su respuesta si no encuentra ninguna 
+                                        apropiada entre las predefinidas.</p>
+                                    </div>
+                                    <img src="{{ url_for('static', filename='img/pregunta-semicerrada-simple.png') }}" class="card-img-bottom" alt="...">
+                                </div>
+                            </div>
+                    
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3 h-100">
+                                    <div class="card-header text-center">
+                                        <strong>Pregunta semicerrada de opción múltiple</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">El encuestado puede elegir más de una opción y, además, 
+                                            escribir una respuesta extra.</p>
+                                    </div> 
+                                    <img src="{{ url_for('static', filename='img/pregunta-semicerrada-multiple.png') }}" class="card-img-bottom" alt="...">
+                                </div> 
+                            </div>
+                    
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3 h-100">
+                                    <div class="card-header text-center">
+                                        <strong>Pregunta escala</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">El encuestado elige el número o la palabra que mejor representa su 
+                                            sentimiento u opinión con respecto a lo que se le está preguntando.</p>
+                                    </div>  
+                                    <img src="{{ url_for('static', filename='img/pregunta-escala.png') }}" class="card-img-bottom" alt="...">
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+    
+        

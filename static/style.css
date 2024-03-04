@@ -1,0 +1,45 @@
+
+
+header {
+    background-color: #3498db; /* Fondo */
+    color: white; /* Color del texto */
+    width: 100%; /* Ocupa todo el ancho de la pantalla */
+    
+    top: 0; /* Coloca el encabezado en la parte superior */
+    left: 0; /* Asegura que el encabezado esté en el borde izquierdo */
+    height: 70px; /* Altura */
+}
+
+footer {
+    background-color: #3498db; /* Fondo */
+    padding: 10px; /* Espaciado interior para separar el contenido */
+    color: white; /* Color del texto */
+    text-align: center; /* Alineación el texto*/
+    width: 100%; /* Ocupa todo el ancho de la pantalla */
+    position: fixed; /* Fija el encabezado en la parte superior */
+    bottom: 0; /* Coloca el footer en la parte inferior */
+    left: 0; /* Asegura que el encabezado esté en el borde izquierdo */
+    height: 60px; /* Altura */
+}
+
+
+.floatingInputSuperior {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+.floatingInputInferior {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+.error-message {
+  color: #cc4845;
+  fill: #cc4845;
+  text-align: left;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}

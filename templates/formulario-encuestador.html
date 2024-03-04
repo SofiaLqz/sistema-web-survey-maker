@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+
+<body>
+    <!-- Container -->
+    <div class="container">
+        <div class="row">
+            <!-- Obtener mensajes flash y mostrarlos -->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-success mt-3 alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                        <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bi flex-shrink-0 me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        {{ message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    {% endfor %}
+                </div>
+             {% endif %}
+            {% endwith %}
+            <div class="p-4 p-md-5 mb-4 mt-3 rounded text-body-emphasis bg-body-secondary">
+                <div class="col-lg-12 px-0">
+                    <h1 class=""> {{nombreEncuesta}} </h1>
+                    <p class="lead my-3">{{descripcion}}</p>
+                    <!-- <p>{{objetivo}}</p>-->
+                </div>
+            </div>
+            <!-- Formulario -->
+            <form class="mx-auto px-3 py-3 needs-validation" method="POST" action="{{url_for('guardar_encuesta', idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta, idEncuestado=idEncuestado)}}" novalidate>
+                <div class="mx-4 my-4">
+                {% for pregunta_id, pregunta in preguntas_dict.items() %}
+                    <h6>{{ pregunta['detalle'] }}</h6>
+                    {% if pregunta['tipo'] == 1 %}
+                        <!-- Pregunta abierta -->
+                        <div class="mb-3">
+                            <input type="hidden" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">
+                            <textarea type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control  w-50" rows="3" maxlength="400"></textarea>
+                        </div>
+                    {% elif pregunta['tipo'] == 2 %}
+                        <!-- Pregunta cerrada de opción simple -->
+                        {% for dict_respuesta in pregunta['respuestas'] %}
+                            <div class="mb-3">
+                                <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                    {% elif pregunta['tipo'] == 3 %}
+                        <!-- Pregunta cerrada de opción múltiple -->
+                        {% for dict_respuesta in pregunta['respuestas'] %}
+                            <div class="mb-3">
+                                <input type="checkbox" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                        <!-- Pregunta semicerrada de opción simple -->
+                    {% elif pregunta['tipo'] == 4 %}
+                        {% for dict_respuesta in pregunta['respuestas'][:-1] %}
+                            <div class="mb-3">
+                                <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                        <div class="mb-3">
+                            <input type="radio" id="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" >
+                            <label for="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">{{ pregunta['respuestas'][-1]['detalle']  }}</label>
+                            <input type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control w-50">
+                        </div>
+                    
+                    {% elif pregunta['tipo'] == 5 %}
+                        <!-- Pregunta semicerrada de opción múltiple -->
+                        {% for dict_respuesta in pregunta['respuestas'][:-1] %}
+                            <div class="mb-3">
+                                <input type="checkbox" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                        <div class="mb-3">
+                            <input type="checkbox" id="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">
+                            <label for="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">{{ pregunta['respuestas'][-1]['detalle'] }}</label>
+                            <input type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control w-50">
+                        </div>
+    
+                    {% elif pregunta['tipo'] == 6 %}
+                        <!-- Pregunta escala -->
+                        {% for dict_respuesta in pregunta['respuestas'] %}
+                            <div class="btn-group mb-3"  role="group" aria-label="Escala">
+                                <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}" class="btn-check" autocomplete="off">
+                                <label class="btn  btn-outline-secondary" for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <!-- Botón de envío del formulario -->
+                <button type="submit" class="btn btn-dark mx-4">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script>
+    <script>
+        // Obtener el elemento de la alerta
+        var alertElement = document.querySelector('.alert');
+    
+        // Establecer un temporizador para ocultar la alerta después de 5 segundos (5000 milisegundos)
+        setTimeout(function() {
+            alertElement.style.display = 'none';
+        }, 5000);
+    </script>
+</body>
+</html>

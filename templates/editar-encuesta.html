@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar encuesta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script> 
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mt-2 mb-2 d-flex flex-lg-row align-items-center">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('home')}}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="75" height="36">
+            </a>
+            <!-- Botón del menú -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Elementos del menú colapsable -->
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="menu">
+                <!-- Header -->
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbar2Label"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <!-- Body -->
+                <div class="offcanvas-body mx-4 mx-lg-0 d-flex flex-column flex-lg-row align-items-center">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active mx-lg-2 mb-3 mb-lg-0" href="{{url_for('crear_encuesta')}}">Crear encuesta</a>
+                        </li>
+                    </ul>
+                    <!-- Barra de búsqueda -->
+                    <div class="col-12 col-lg-auto mx-lg-2" role="search">
+                        <input class="form-control" type="search"  id="buscar" oninput="filtrar()" placeholder="Buscar..." aria-label="Search">
+                    </div>
+                    <!-- Botón 'Cerrar sesión'-->
+                    <div class="mt-auto mt-lg-0 ms-lg-2 col-12 col-lg-auto">
+                        <a class="btn btn-outline-light w-100" href="{{url_for('logout')}}" role="button">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Contenedor --> 
+    <div class="container">
+        <!-- Obtener y mostrar los mensajes flash --> 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-success d-flex align-items-center mt-3" role="alert">
+                    {% for message in messages %}
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="bi flex-shrink-0 me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <!-- Tabla --> 
+        <div class="table-responsive">
+            <table class="table table-striped mt-3" id="tabla">
+                <!-- Encabezados -->
+                <thead class="table-dark">
+                    <tr>
+                        <!-- Encabezado 1 -->
+                        <th class="align-middle">
+                            ENCUESTA: {{ nombreEncuesta }}
+                        </th>
+                        <th class="col-3 text-end align-middle">
+                            <a href="{{url_for('edit_encuesta_datos', idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta)}}"  class="btn btn-light d-inline-flex align-items-center">
+                                Editar datos
+                                <span class="ms-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!-- Encabezado 2 -->
+                        <th class="align-middle">
+                            PREGUNTAS DEL FORMULARIO
+                        </th>
+                        <th class="col-3 text-end align-middle">
+                            <a href="{{url_for('add_preguntas', idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta)}}" class="btn btn-success d-inline-flex align-items-center">
+                                Agregar pregunta
+                                <span class="ms-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Mostrar cada pregunta cargada para la encuesta -->
+                    {% for datos in encuesta %}
+                        <tr>
+                            <!-- Pregunta -->
+                            <td class="align-middle">{{ datos.1 }}</td>
+                            <!-- Botón editar -->
+                            <td class="col-3 text-end align-middle">
+                                <a href="{{url_for('edit_encuesta_preguntas', idPregunta=datos.0, idEncuesta=datos.2, nombreEncuesta=datos.3)}}"
+                                    class="btn btn-dark mx-1 my-1 d-inline-flex align-items-center">
+                                    Editar pregunta
+                                    <span class="ms-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                                </form> 
+                                <!-- Botón eliminar, abre un modal (emergente) -->
+                                <button class="btn btn-danger mx-1 my-1 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#advertencia{{ datos.0 }}">
+                                    Eliminar pregunta
+                                    <span class="ms-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Modal --
+                        Se genera un id único para cada modal vinculado a una fila en  particular-->
+                        <div class="modal fade" id="advertencia{{ datos.0 }}" tabindex="-1" aria-labelledby="advertenciaTitulo" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="advertenciaTitulo">{{ datos.1 }} </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5> ¿Deseas eliminar esta pregunta? </h5>
+                                        <p class="text-secondary">
+                                            Esta acción es irreversible y perderás toda la información relacionada a tu pregunta.
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
+                                        <form action="{{url_for('delete_encuesta_pregunta', idPregunta=datos.0, idEncuesta=datos.2, nombreEncuesta=datos.3)}}" method="POST">
+                                            <button TYPE="submit" class="btn btn-danger">
+                                                Sí
+                                            </button>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table> 
+        </div>
+    </div>
+    <script>
+        function filtrar() {
+            var input, filter, table, tr, td, i, j, visible;
+            input = document.getElementById("buscar");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("tabla");
+            tr = table.getElementsByTagName("tr");
+            if (filter === '') {
+                // Si el campo de búsqueda está vacío, muestra todos los elementos
+                for (var i = 0; i < tr.length; i++) {
+                    tr[i].style.display = "";
+                }
+            } else {
+                for (i = 0; i < tr.length; i++) {
+                    visible = false;
+                    td = tr[i].getElementsByTagName("td");
+                    for (j = 0; j < td.length; j++) {
+                        if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            visible = true;
+                        }
+                    }
+                    if (visible === true) {
+                        tr[i].style.display = "";
+                    } else {
+                    tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

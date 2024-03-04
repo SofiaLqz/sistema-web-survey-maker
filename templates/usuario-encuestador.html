@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil encuestador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mt-2 mb-2 d-flex flex-lg-row align-items-center">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('home')}}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="75" height="36">
+            </a>
+            <!-- Botón del menú -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Elementos del menú colapsable -->
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="menu">
+                <!-- Header -->
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbar2Label"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <!-- Body -->
+                <div class="offcanvas-body mx-4 mx-lg-0 d-flex flex-column flex-lg-row align-items-center">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active mx-lg-2 mb-3 mb-lg-0" href="{{url_for('crear_encuesta')}}">Crear encuesta</a>
+                        </li>
+                    </ul>
+                    <!-- Barra de búsqueda -->
+                    <div class="col-12 col-lg-auto mx-lg-2" role="search">
+                        <input class="form-control" type="search"  id="buscar" placeholder="Buscar..." aria-label="Search">
+                    </div>
+                    <!-- Botón 'Cerrar sesión'-->
+                    <div class="mt-auto mt-lg-0 ms-lg-2 col-12 col-lg-auto">
+                        <a class="btn btn-outline-light w-100" href="{{url_for('logout')}}" role="button">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Contenedor -->  
+    <div class="container mt-3">
+        <!-- Obtener y mostrar los mensajes flash --> 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-success d-flex align-items-center mt-3" role="alert">
+                    {% for message in messages %}
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="bi flex-shrink-0 me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                            {{ message|safe }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="table-responsive">
+            <!-- Tabla --> 
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <!-- Encabezado 1 -->
+                        <th class="align-middle">
+                            ENCUESTADOR: {{nombreEncuestador}} {{apellidoEncuestador}}
+                        </th>
+                        <th class="col-3 text-end align-middle">
+                            <!-- Mostrar el botón solo si el encuestador no tiene un usuario -->
+                            {% if usuarioExistente == None %}
+                            <a href="{{url_for('add_usuario_encuestador', idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta, idEncuestador=idEncuestador,nombreCompleto=nombreCompleto)}}"  class="btn btn-light d-inline-flex align-items-center">
+                                Crear usuario
+                            </a>
+                            {% endif %}
+                        </th>
+                    </tr>
+                    <tr>
+                        <!-- Encabezado 2 -->
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>  
+                    <!-- Si el encuestador no tiene un usuario mostrar texto -->
+                    {% if usuarioExistente == None %}
+                    <td colspan="2">
+                        <p>Este encuestador aún no tiene un usuario asignado</p>
+                    </td>
+                    {% else %}
+                        <tr> 
+                            <!-- Si la tupla de datos recibida no está vacía -->
+                            {% if encuestador != None %}
+                            <!-- Nombre de usuario del encuestador-->
+                            <td class="align-middle">
+                                {{ encuestador.1 }}
+                            </td>
+                            <!-- Botón -->
+                            <td class="text-end"> 
+                                <form action="{{url_for('delete_usuario_encuestador', idUsuarioEncuestador=encuestador.2,idEncuestador=idEncuestador,idEncuesta=idEncuesta,nombreEncuesta=nombreEncuesta)}}"
+                                method="POST">
+                                <button type="submit" class="btn btn-danger justify-content-end">
+                                    Desactivar
+                                </button>
+                                </form>
+                            </td>
+                            {% else %}
+                            <td class="align-middle">
+                                <p>Este encuestador está inactivo para esta encuesta</p>
+                            </td>
+                            <td class="text-end"> 
+                                <form action="{{url_for('update_usuario_encuestador', idEncuestador=idEncuestador,idEncuesta=idEncuesta,nombreEncuesta=nombreEncuesta)}}"
+                                method="POST">
+                                <button type="submit" class="btn btn-success justify-content-end">
+                                    Activar
+                                </button>
+                                </form>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

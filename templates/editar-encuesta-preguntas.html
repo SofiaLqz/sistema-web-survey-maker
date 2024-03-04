@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edición de pregunta</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mt-2 mb-2 d-flex flex-lg-row align-items-center">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('home')}}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="75" height="36">
+            </a>
+            <!-- Botón del menú -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Elementos del menú colapsable -->
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="menu">
+                <!-- Header -->
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbar2Label"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <!-- Body -->
+                <div class="offcanvas-body mx-4 mx-lg-0 d-flex flex-column flex-lg-row align-items-center">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active mx-lg-2 mb-3 mb-lg-0" href="{{url_for('crear_encuesta')}}">Crear encuesta</a>
+                        </li>
+                    </ul>
+                    <!-- Barra de búsqueda -->
+                    <div class="col-12 col-lg-auto mx-lg-2" role="search">
+                        <input class="form-control" type="search"  id="buscar" placeholder="Buscar..." aria-label="Search">
+                    </div>
+                    <!-- Botón 'Cerrar sesión'-->
+                    <div class="mt-auto mt-lg-0 ms-lg-2 col-12 col-lg-auto">
+                        <a class="btn btn-outline-light w-100" href="{{url_for('logout')}}" role="button">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Contenedor --> 
+    <div class="container">
+        <div class="row">
+            <!-- Obtener y mostrar los mensajes flash --> 
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-success d-flex align-items-center mt-3" role="alert">
+                        {% for message in messages %}
+                            <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="bi flex-shrink-0 me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                            {{ message|safe }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <!-- Título -->     
+            <div class="col-md-12 mb-3 mt-3 text-center">
+                <h5>Edita la pregunta y sus opciones</h5>
+            </div>
+            <div class="col-md-12 col-lg-6 mx-auto mt-3 justify-content-center align-items-center">
+                <!-- Formulario de pregunta--> 
+                <form class = "card w-100 needs-validation" method="POST" action="{{url_for('update_encuesta_pregunta', idPregunta=idPregunta,idEncuesta=idEncuesta,nombreEncuesta=nombreEncuesta)}}" novalidate>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <!-- Lista desplegable de opciones de tipo de pregunta -->
+                            <label for="listaDesplegable" class="form-label">Tipo de pregunta
+                                <!-- Ícono de información con enlace -->
+                                <a class="icon-link" href="{{url_for('info_tipos_preguntas')}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16" role="link" aria-label="Más información">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                                    </svg>
+                                </a>
+                            </label>
+                            <!-- Opciones disponibles en la lista desplegable // Elección obligatoria -->
+                            <input class="form-control" list="opcionesTipoPregunta" id="listaDesplegable" 
+                            name="listaDesplegable" placeholder="Seleccionar..." value="{{ datosPreguntas[0].4 }}" required>
+                            <datalist id="opcionesTipoPregunta">
+                                <option value="Abierta">
+                                <option value="Cerrada de opción simple">
+                                <option value="Cerrada de opción múltiple">
+                                <option value="Semicerrada de opción simple">
+                                <option value="Semicerrada de opción múltiple">
+                                <option value="Escala">
+                            </datalist>
+                            <!-- Mensaje de error si la validación falla-->
+                            <div class="invalid-feedback">
+                                Seleccione un tipo de pregunta
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <!-- Campo de texto para ingresar la pregunta // Input obligatorio-->
+                            <label for="pregunta" class="form-label">Pregunta</label>
+                            <textarea class="form-control" id="pregunta" name="pregunta" rows="3" maxlength="400" required>{{ datosPreguntas[0].0 }}</textarea>
+                            <!-- Mensaje de error si la validación falla-->
+                            <div class="invalid-feedback">
+                                Ingrese una pregunta
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <!-- Ingresar N° de opciones de respuesta // Input obligatorio -->
+                            <label for="cantOpciones" class="form-label">Cantidad de opciones de respuesta</label>
+                            <input type="number" id="cantOpciones" name="cantOpciones" class="form-control" value="{{ datosPreguntas[0].1 }}" required>
+                            <div class="invalid-feedback">
+                                Ingrese la cantidad de opciones de respuesta que tiene la pregunta
+                            </div>
+                        </div>
+                        <!-- Botón de envío del formulario -->
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-3 justify-content-center align-items-center">
+                <!-- Si el tipo de pregunta NO ES 'abierta'--> 
+                {% if datosPreguntas[0].3 != 1 %}
+                <!-- Formulario de opciones de respuesta--> 
+                    <form class = "card w-50 mx-auto" method="POST" action="{{url_for('update_encuesta_respuestas', idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta, idPregunta=idPregunta)}}">
+                        <div class="card-body" id="camposTextoContainer">
+                            <!-- Botón para agregar opción --> 
+                            <div class="mb-3">
+                                <a href= "{{url_for('add_encuesta_respuesta_nueva', idPregunta=idPregunta, pregunta=datosPreguntas[0].0)}}" type="button" class="btn btn-success">
+                                    Agregar opción
+                                </a>
+                            </div> 
+                            <!-- Se muestran los inputs de texto con las opciones de respuesta cargadas para la pregunta -->
+                            {% for i in range(datosPreguntas[0].1) %}
+                                <div class="mb-3 input-group">
+                                    {% if datosPreguntas[i] and datosPreguntas[i][6] %}
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Opción {{ i+1 }}</span>
+                                        </div>
+                                        <input type="text" id="opcion{{ i+1 }}" name="opcion{{ i+1 }}" class="form-control" value="{{ datosPreguntas[i][6] }}">
+                                        <!-- Botón para eliminar opción -->
+                                        <form action="{{url_for('delete_encuesta_respuesta', idPregunta=idPregunta, idRespuesta=datosPreguntas[i][5], cantOpciones=datosPreguntas[0][1], idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta)}}" 
+                                            method="POST">
+                                            <button class="btn btn-danger" type="submit">
+                                                Eliminar
+                                            </button>
+                                        </form> 
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <!-- Botón de envío del formulario -->
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Deshabilitar el envío de formularios si hay campos no válidos
+        // Extraido de https://getbootstrap.com/docs/5.3/forms/validation/
+        (() => {
+            'use strict'
+    
+            const forms = document.querySelectorAll('.needs-validation')
+    
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+    
+                form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script> 
+</body>
+</html>
