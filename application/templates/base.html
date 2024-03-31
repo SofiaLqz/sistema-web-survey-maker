@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+</head>
+<body>
+    <nav>
+        {% block nav %}
+        <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container mt-2 mb-2 d-flex flex-lg-row align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand" href="{{ url_for('vistas_principales.home')}}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="75" height="36">
+                </a>
+                <!-- Botón del menú -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Elementos del menú colapsable -->
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="menu">
+                    <!-- Header -->
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbar2Label"></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <!-- Body -->
+                    <div class="offcanvas-body mx-4 mx-lg-0 d-flex flex-column flex-lg-row align-items-center">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active mx-lg-2 mb-3 mb-lg-0" href="{{url_for('crud_encuesta.crear_encuesta')}}">Crear encuesta</a>
+                            </li>
+                        </ul>
+                        <!-- Barra de búsqueda -->
+                        <div class="col-12 col-lg-auto mx-lg-2" role="search">
+                            <input class="form-control" type="search"  id="buscar" oninput="filtrar()" placeholder="Buscar..." aria-label="Search">
+                        </div>
+                        <!-- Botón 'Cerrar sesión'-->
+                        <div class="mt-auto mt-lg-0 ms-lg-2 col-12 col-lg-auto">
+                            <a class="btn btn-outline-light w-100" href="{{url_for('auth.logout')}}" role="button">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </nav>
+    <main>
+        <section class="alerts">
+            <!-- Obtener y mostrar los mensajes flash --> 
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" role="alert">
+                                {{ message|safe }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </section>
+        <section class="content">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+    <script src="/static/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script>
+</body>
+</html>

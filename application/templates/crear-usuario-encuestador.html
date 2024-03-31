@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+    Cargar perfil del encuestador
+{% endblock %}
+{% block nav %}
+    {{ super() }} <!-- Esto incluirá el contenido del bloque nav de base.html -->
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto align-items-center mt-5 mb-3">
+                <!-- Formulario -->
+                <form class="card w-100 needs-validation" action="{{url_for('crud_encuestadores.add_usuario_encuestador')}}" method="POST" novalidate>
+                    <input type="hidden" value="{{ nombreEncuesta }}" name="nombreEncuesta">
+                    <input type="hidden" value="{{ idEncuesta }}" name="idEncuesta">
+                    <input type="hidden" value="{{ idEncuestador }}" name="idEncuestador">
+                    <!-- Nombre de la pregunta -->
+                    <h5 class="card-title text-center mt-3">
+                        {{ nombreCompleto }}
+                    </h5>
+                    
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <!-- Ingresar apellido  // Input obligatorio-->
+                            <label for="contrasenia" class="form-label">Contraseña</label>
+                            <input type="text" id="contrasenia" name="contrasenia" class="form-control" placeholder="Ingresar contraseña" required>        
+                            <!-- Mensaje de error si la validación falla-->
+                            <div class="invalid-feedback">
+                                Crear una contraseña
+                            </div>
+                        </div>
+                         <!-- Botón de envío del formulario-->
+                        <button type="submit" class="btn btn-primary">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <script>
+        // Deshabilitar el envío de formularios si hay campos no válidos
+        // Extraido de https://getbootstrap.com/docs/5.3/forms/validation/
+        (() => {
+            'use strict'
+    
+            const forms = document.querySelectorAll('.needs-validation')
+    
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+    
+                form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+{% endblock %}

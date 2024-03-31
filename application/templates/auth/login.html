@@ -1,0 +1,54 @@
+{% extends 'auth/base-auth.html' %}
+{% block title %}
+    Acceso
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto mt-5 mb-5" id="login-container">
+                <!-- Logo -->
+                <img class="mb-4 mx-auto d-block" src="{{ url_for('static', filename='img/logo-login.png') }}" alt="Logo" width="117" height="55">
+                <!-- Mensaje de registro -->
+                {% if registro_exitoso %}
+                <div class="alert alert-success" role="alert">
+                    Registro exitoso. Por favor, inicia sesión.
+                </div>
+                {% endif %}
+                <!-- Mensajes flash -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <!-- Formulario -->
+                <form class="form-signin m-auto" action="{{url_for('auth.login')}}" method="POST">
+                    <!-- Inputs del formulario -->
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email-login" name="email" placeholder="ejemplo@dominio.com">
+                        <label for="email-login" class="form-label col-form-label-sm">Correo electrónico</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="contrasenia-login" name="contrasenia" placeholder="Ingrese contraseña">
+                        <label for="contrasenia-login" class="form-label col-form-label-sm">Contraseña</label>
+                    </div>
+                    <!-- Botón de envío del formulario-->
+                    <button class="btn btn-primary mt-3" type="submit">Ingresar</button>
+                    <!-- Acceso al formulario de registro -->
+                    <div class="pt-2">
+                        <p> ¿Aún no te registraste? 
+                            <a href="{{url_for('auth.register')}}" class="link-primary link-offset-2 link-underline link-underline-opacity-0 d-inline">Crea una cuenta</a>
+                        </p>
+                    </div>
+                    <hr>
+                    <a href="{{url_for('auth.login_encuestador')}}" class="btn btn-secondary btn-sm">
+                        Acceder como encuestador
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

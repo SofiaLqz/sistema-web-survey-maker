@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}
+    Perfil encuestador
+{% endblock %}
+{% block nav %}
+    {{ super() }} <!-- Esto incluirá el contenido del bloque nav de base.html -->
+{% endblock %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="table-responsive">
+            <!-- Tabla --> 
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <!-- Encabezado 1 -->
+                        <th class="align-middle">
+                            ENCUESTADOR: {{nombreEncuestador}} {{apellidoEncuestador}}
+                        </th>
+                        <th class="col-3 text-end align-middle">
+                            <!-- Mostrar el botón solo si el encuestador no tiene un usuario -->
+                            {% if usuarioExistente == None %}
+                            <a href="{{url_for('crud_encuestadores.add_usuario_encuestador', idEncuesta=idEncuesta, nombreEncuesta=nombreEncuesta, idEncuestador=idEncuestador,nombreCompleto=nombreCompleto)}}"  class="btn btn-light d-inline-flex align-items-center">
+                                Crear usuario
+                            </a>
+                            {% endif %}
+                        </th>
+                    </tr>
+                    <tr>
+                        <!-- Encabezado 2 -->
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>  
+                    <!-- Si el encuestador no tiene un usuario mostrar texto -->
+                    {% if usuarioExistente == None %}
+                    <td colspan="2">
+                        <p>Este encuestador aún no tiene un usuario asignado</p>
+                    </td>
+                    {% else %}
+                        <tr> 
+                            <!-- Si la tupla de datos recibida no está vacía -->
+                            {% if encuestador != None %}
+                            <!-- Nombre de usuario del encuestador-->
+                            <td class="align-middle">
+                                {{ encuestador.1 }}
+                            </td>
+                            <!-- Botón -->
+                            <td class="text-end"> 
+                                <form action="{{url_for('crud_encuestadores.delete_usuario_encuestador', idUsuarioEncuestador=encuestador.2,idEncuestador=idEncuestador,idEncuesta=idEncuesta,nombreEncuesta=nombreEncuesta)}}"
+                                method="POST">
+                                <button type="submit" class="btn btn-danger justify-content-end">
+                                    Desactivar
+                                </button>
+                                </form>
+                            </td>
+                            {% else %}
+                            <td class="align-middle">
+                                <p>Este encuestador está inactivo para esta encuesta</p>
+                            </td>
+                            <td class="text-end"> 
+                                <form action="{{url_for('crud_encuestadores.update_usuario_encuestador', idEncuestador=idEncuestador,idEncuesta=idEncuesta,nombreEncuesta=nombreEncuesta)}}"
+                                method="POST">
+                                <button type="submit" class="btn btn-success justify-content-end">
+                                    Activar
+                                </button>
+                                </form>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

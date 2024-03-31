@@ -1,0 +1,38 @@
+{% extends 'auth/base-auth.html' %}
+{% block title %}
+    Acceso encuestador
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto mt-5 mb-5" id="login-container"> 
+                <!-- Mensajes flash -->
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% endwith %}   
+                <!-- Título -->
+                <h1 class="h3 mb-3 text-center fw-normal">Encuestador</h1>           
+                <!-- Formulario -->
+                <form class="form-signin m-auto" action="{{url_for('auth.login_encuestador')}}" method="POST">
+                    <!-- Inputs del formulario -->
+                    <div class="form-floating">
+                        <input type="usuario" class=" form-control" id="usuario-login" placeholder="Ingrese usuario" name="usuario">
+                        <label for="usuario-login" class="form-label col-form-label-sm">Usuario</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="contrasenia-login" placeholder="Ingrese contraseña" name="contrasenia">
+                        <label for="contrasenia-login" class="form-label col-form-label-sm">Contraseña</label>
+                    </div>
+                    <!-- Botón de envío del formulario-->
+                    <button class="btn btn-primary mt-3" type="submit">Ingresar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

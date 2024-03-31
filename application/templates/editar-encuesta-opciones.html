@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}
+    Agregar nuevas opciones
+{% endblock %}
+{% block nav %}
+    {{ super() }} <!-- Esto incluirá el contenido del bloque nav de base.html -->
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-6 mx-auto mt-3 justify-content-center align-items-center">
+                <!-- Formulario -->
+                <form class = "card w-100 needs-validation" method="POST" action="{{ url_for('crud_preguntas_respuestas.save_encuesta_respuesta_nueva', idPregunta=idPregunta, pregunta=pregunta, cantOpciones=cantOpciones) }}" novalidata>
+                    <!-- Nombre de la pregunta -->
+                    <h5 class="card-title text-center">
+                        {{ pregunta|escape }}
+                    </h5>
+                    <!-- Se muestran inputs de texto para cargar las opciones de respuesta -->
+                    <div class="card-body">
+                        <!-- Se muestran tantos inputs como el valor 'cantOpciones' recibido-->
+                            <div class="mb-3">
+                                <label for="opcion{{ cantOpciones+1 }}" class="form-label">Opción {{ cantOpciones+1 }}</label>
+                                <input type="text" id="opcion{{ cantOpciones+1 }}" name="opcion{{ cantOpciones+1 }}" class="form-control" required>
+                            </div>
+                        <!-- Botón de envío del formulario -->
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Deshabilitar el envío de formularios si hay campos no válidos
+        // Extraido de https://getbootstrap.com/docs/5.3/forms/validation/
+        (() => {
+            'use strict'
+    
+            const forms = document.querySelectorAll('.needs-validation')
+    
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+    
+                form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script> 
+{% endblock %}

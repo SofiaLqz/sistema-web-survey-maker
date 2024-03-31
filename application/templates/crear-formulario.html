@@ -1,86 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargar pregunta</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
-    crossorigin="anonymous">
-    <script src="/static/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
-    crossorigin="anonymous"></script>
-     
-</head>
-<body>
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container mt-2 mb-2 d-flex flex-lg-row align-items-center">
-            <!-- Logo -->
-            <a class="navbar-brand" href="{{ url_for('home')}}">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="75" height="36">
-            </a>
-            <!-- Botón del menú -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Elementos del menú colapsable -->
-            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="menu">
-                <!-- Header -->
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbar2Label"></h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <!-- Body -->
-                <div class="offcanvas-body mx-4 mx-lg-0 d-flex flex-column flex-lg-row align-items-center">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active mx-lg-2 mb-3 mb-lg-0" href="{{url_for('crear_encuesta')}}">Crear encuesta</a>
-                        </li>
-                    </ul>
-                    <!-- Barra de búsqueda -->
-                    <div class="col-12 col-lg-auto mx-lg-2" role="search">
-                        <input class="form-control" type="search"  id="buscar" placeholder="Buscar..." aria-label="Search">
-                    </div>
-                    <!-- Botón 'Cerrar sesión'-->
-                    <div class="mt-auto mt-lg-0 ms-lg-2 col-12 col-lg-auto">
-                        <a class="btn btn-outline-light w-100" href="{{url_for('logout')}}" role="button">Cerrar sesión</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>  
+{% extends 'base.html' %}
+{% block title %}
+    Cargar pregunta
+{% endblock %}
+{% block nav %}
+    {{ super() }} <!-- Esto incluirá el contenido del bloque nav de base.html -->
+{% endblock %}
+{% block content %}
     <div class="container">
-        <div class="row">
-            <!-- Obtener mensajes flash y mostrarlos -->
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="alert alert-success d-flex align-items-center mt-3" role="alert">
-                        {% for message in messages %}
-                            <p>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="bi flex-shrink-0 me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                            </svg>
-                            {{ message|safe }}
-                            </p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
             <!-- Enunciado -->
             <div class="col-md-12 mb-3 mt-3 text-center">
                 <h5>A continuación, cargue las preguntas del formulario de su encuesta</h5>
             </div>
             <div class="col-md-12 col-lg-6 mx-auto justify-content-center align-items-center">
                 <!-- Formulario -->
-                <form class = "card w-100 needs-validation" method="POST" action="{{url_for('add_preguntas') }}" novalidate>
+                <form class = "card w-100 needs-validation" method="POST" action="{{url_for('crud_preguntas_respuestas.add_preguntas') }}" novalidate>
                     <div class="card-body">
                         <div class="mb-3">
                             <!-- Lista desplegable de opciones de tipo de pregunta -->
                             <label for="listaDesplegable" class="form-label">Tipo de pregunta
                                 <!-- Ícono de información con enlace -->
-                                <a class="icon-link" href="{{url_for('info_tipos_preguntas')}}">
+                                <a class="icon-link" href="{{url_for('vistas_principales.info_tipos_preguntas')}}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16" role="link" aria-label="Más información">
                                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
                                     </svg>
@@ -145,6 +84,5 @@
                 }, false)
             })
         })()
-        </script> 
-</body>
-</html>
+    </script> 
+{% endblock %}
