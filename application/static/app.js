@@ -27,9 +27,12 @@ function filtrar() {
         }
     }
 }
-// Obtener el elemento de la alerta
-//var alertElement = document.querySelector('.alert');
 // Establecer un temporizador para ocultar la alerta después de 5 segundos (5000 milisegundos)
-//setTimeout(function() {
-    //alertElement.style.display = 'none';
-//}, 5000);
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        var flashMessages = document.querySelectorAll('.alert');
+        flashMessages.forEach(function(message) {
+            message.style.display = 'none';
+        });
+    }, 5000);
+});

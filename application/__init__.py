@@ -43,12 +43,6 @@ def create_app(test_config=None):
 
     return app
 
-#if __name__ == '__main__':
-    #create_app().run(debug=True)
-
-# Configuro la aplicación usando el archivo de configuración
-#app.config.from_pyfile('config.py')
-
 
 
 
