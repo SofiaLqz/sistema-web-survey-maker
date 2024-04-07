@@ -6,80 +6,79 @@
     {{ super() }} <!-- Esto incluirá el contenido del bloque nav de base.html -->
 {% endblock %}
 {% block content %}
-<body>
     <div class="container">
-        <div class="p-4 p-md-5 mt-3 mb-4 rounded text-body-emphasis bg-body-secondary">
-            <div class="col-lg-12 px-0">
-                <h1 class=""> {{nombreEncuesta}} </h1>
-                <p class="lead my-3">{{descripcion}}</p>
-                <!-- <p>{{objetivo}}</p>-->
+        <div class="row">
+            <div class="p-4 p-md-5 mt-3 mb-4 rounded text-body-emphasis bg-body-secondary">
+                    <h1 class=""> {{nombreEncuesta}} </h1>
+                    <p class="lead my-3">{{descripcion}}</p>
+                    <!-- <p>{{objetivo}}</p>-->
             </div>
-        </div>
-        <!-- Formulario -->
-        <div class="mx-auto px-3 py-3">
-            <div class="mx-4 my-4">
-            {% for pregunta_id, pregunta in preguntas_dict.items() %}
-                <h6>{{ pregunta['detalle'] }}</h6>
-                {% if pregunta['tipo'] == 1 %}
-                    <!-- Pregunta abierta -->
-                    <div class="mb-3">
-                        <input type="hidden" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">
-                        <textarea type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control  w-50" rows="3" maxlength="400"></textarea>
-                    </div>
-                {% elif pregunta['tipo'] == 2 %}
-                    <!-- Pregunta cerrada de opción simple -->
-                    {% for dict_respuesta in pregunta['respuestas'] %}
+            <!-- Formulario -->
+            <div class="mx-auto mx-lg-4 px-3 py-3 col-lg-8 col-12">
+                <div class="mx-4 my-4">
+                {% for pregunta_id, pregunta in preguntas_dict.items() %}
+                    <h6>{{ pregunta['detalle'] }}</h6>
+                    {% if pregunta['tipo'] == 1 %}
+                        <!-- Pregunta abierta -->
                         <div class="mb-3">
-                            <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
-                            <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            <input type="hidden" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">
+                            <textarea type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control" rows="3" maxlength="400"></textarea>
                         </div>
-                    {% endfor %}
-                {% elif pregunta['tipo'] == 3 %}
-                    <!-- Pregunta cerrada de opción múltiple -->
-                    {% for dict_respuesta in pregunta['respuestas'] %}
+                    {% elif pregunta['tipo'] == 2 %}
+                        <!-- Pregunta cerrada de opción simple -->
+                        {% for dict_respuesta in pregunta['respuestas'] %}
+                            <div class="mb-3">
+                                <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                    {% elif pregunta['tipo'] == 3 %}
+                        <!-- Pregunta cerrada de opción múltiple -->
+                        {% for dict_respuesta in pregunta['respuestas'] %}
+                            <div class="mb-3">
+                                <input type="checkbox" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                        <!-- Pregunta semicerrada de opción simple -->
+                    {% elif pregunta['tipo'] == 4 %}
+                        {% for dict_respuesta in pregunta['respuestas'][:-1] %}
+                            <div class="mb-3">
+                                <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
                         <div class="mb-3">
-                            <input type="checkbox" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
-                            <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            <input type="radio" id="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" >
+                            <label for="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">{{ pregunta['respuestas'][-1]['detalle']  }}</label>
+                            <input type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control">
                         </div>
-                    {% endfor %}
-                    <!-- Pregunta semicerrada de opción simple -->
-                {% elif pregunta['tipo'] == 4 %}
-                    {% for dict_respuesta in pregunta['respuestas'][:-1] %}
+                    
+                    {% elif pregunta['tipo'] == 5 %}
+                        <!-- Pregunta semicerrada de opción múltiple -->
+                        {% for dict_respuesta in pregunta['respuestas'][:-1] %}
+                            <div class="mb-3">
+                                <input type="checkbox" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
+                                <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
                         <div class="mb-3">
-                            <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
-                            <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            <input type="checkbox" id="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">
+                            <label for="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">{{ pregunta['respuestas'][-1]['detalle'] }}</label>
+                            <input type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control">
                         </div>
-                    {% endfor %}
-                    <div class="mb-3">
-                        <input type="radio" id="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" >
-                        <label for="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">{{ pregunta['respuestas'][-1]['detalle']  }}</label>
-                        <input type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control w-50">
-                    </div>
-                
-                {% elif pregunta['tipo'] == 5 %}
-                    <!-- Pregunta semicerrada de opción múltiple -->
-                    {% for dict_respuesta in pregunta['respuestas'][:-1] %}
-                        <div class="mb-3">
-                            <input type="checkbox" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}">
-                            <label for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
-                        </div>
-                    {% endfor %}
-                    <div class="mb-3">
-                        <input type="checkbox" id="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">
-                        <label for="{{ pregunta['respuestas'][-1]['id_respuesta'] }}">{{ pregunta['respuestas'][-1]['detalle'] }}</label>
-                        <input type="text" name="{{ pregunta['respuestas'][-1]['id_respuesta'] }}" class="form-control w-50">
-                    </div>
 
-                {% elif pregunta['tipo'] == 6 %}
-                    <!-- Pregunta escala -->
-                    {% for dict_respuesta in pregunta['respuestas'] %}
-                        <div class="btn-group mb-3"  role="group" aria-label="Escala">
-                            <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}" class="btn-check" autocomplete="off">
-                            <label class="btn  btn-outline-secondary" for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+                    {% elif pregunta['tipo'] == 6 %}
+                        <!-- Pregunta escala -->
+                        {% for dict_respuesta in pregunta['respuestas'] %}
+                            <div class="btn-group mb-3"  role="group" aria-label="Escala">
+                                <input type="radio" id="{{ dict_respuesta['id_respuesta'] }}" name="respuesta{{ pregunta_id }}" value="{{ dict_respuesta['id_respuesta'] }}" class="btn-check" autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="{{ dict_respuesta['id_respuesta'] }}">{{ dict_respuesta['detalle'] }}</label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </div>
             </div>
         </div>
     </div>

@@ -14,7 +14,7 @@
                 <thead class="table-dark">
                     <tr>
                         <!-- Encabezado 1 -->
-                        <th class="align-middle">
+                        <th class="align-middle" colspan="2">
                             ENCUESTA: {{ nombreEncuesta }}
                         </th>
                         <th class="col-3 text-end align-middle">
@@ -30,6 +30,7 @@
                     </tr>
                     <tr>
                         <!-- Encabezado 2 -->
+                        <th class="align-middle">ID</th>
                         <th class="align-middle">
                             PREGUNTAS DEL FORMULARIO
                         </th>
@@ -49,6 +50,10 @@
                     <!-- Mostrar cada pregunta cargada para la encuesta -->
                     {% for datos in encuesta %}
                         <tr>
+                            <!-- ID automático asignado mediante el número del índice actual en el bucle -->
+                            <td class="align-middle">
+                                {{ loop.index }}
+                            </td>
                             <!-- Pregunta -->
                             <td class="align-middle">{{ datos.1 }}</td>
                             <!-- Botón editar -->

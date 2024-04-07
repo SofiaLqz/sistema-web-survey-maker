@@ -17,21 +17,23 @@
                 {% endif %}
                 {% endwith %}   
                 <!-- Título -->
-                <h1 class="h3 mb-3 text-center fw-normal">Encuestador</h1>           
-                <!-- Formulario -->
-                <form class="form-signin m-auto" action="{{url_for('auth.login_encuestador')}}" method="POST">
-                    <!-- Inputs del formulario -->
-                    <div class="form-floating">
-                        <input type="usuario" class=" form-control" id="usuario-login" placeholder="Ingrese usuario" name="usuario">
-                        <label for="usuario-login" class="form-label col-form-label-sm">Usuario</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control" id="contrasenia-login" placeholder="Ingrese contraseña" name="contrasenia">
-                        <label for="contrasenia-login" class="form-label col-form-label-sm">Contraseña</label>
-                    </div>
-                    <!-- Botón de envío del formulario-->
-                    <button class="btn btn-primary mt-3" type="submit">Ingresar</button>
-                </form>
+                <div>
+                    <h1 class="h3 mb-3 text-center fw-normal">Encuestador</h1>           
+                    <!-- Formulario -->
+                    <form class="form-signin m-auto w-100" action="{{url_for('auth.login_encuestador')}}" method="POST">
+                        <!-- Inputs del formulario -->
+                        <div class="form-floating">
+                            <input type="usuario" class=" form-control" id="usuario-login" placeholder="Ingrese usuario" name="usuario">
+                            <label for="usuario-login" class="form-label col-form-label-sm">Usuario</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="contrasenia-login" placeholder="Ingrese contraseña" name="contrasenia">
+                            <label for="contrasenia-login" class="form-label col-form-label-sm">Contraseña</label>
+                        </div>
+                        <!-- Botón de envío del formulario-->
+                        <button class="btn btn-primary mt-3" type="submit">Ingresar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

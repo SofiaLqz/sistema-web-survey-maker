@@ -12,7 +12,7 @@
                 <!-- Formulario -->
                 <form class = "card w-100 needs-validation" method="POST" action="{{ url_for('crud_preguntas_respuestas.save_encuesta_respuesta_nueva', idPregunta=idPregunta, pregunta=pregunta, cantOpciones=cantOpciones) }}" novalidata>
                     <!-- Nombre de la pregunta -->
-                    <h5 class="card-title text-center">
+                    <h5 class="card-title text-center mt-2">
                         {{ pregunta|escape }}
                     </h5>
                     <!-- Se muestran inputs de texto para cargar las opciones de respuesta -->
