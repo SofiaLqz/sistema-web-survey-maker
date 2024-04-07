@@ -1,0 +1,31 @@
+html, body {
+  min-height: 100%;
+  background-image: linear-gradient(#f8f9fa 0%, #dee2e6 100%);
+}
+.error-message {
+  color: #cc4845;
+  fill: #cc4845;
+  text-align: left;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+#login-container {
+  max-width: 540px;
+  padding: 48px;
+}
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+#nombre-completo, #nombre-usuario, #email, #contrasenia, #email-login, #usuario-login {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+#confirmar-contrasenia, #nombre-usuario, #email, #contrasenia, #contrasenia-login {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+#copyright {
+  font-size: 13px;
+}
